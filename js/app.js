@@ -31,7 +31,7 @@ class Player {
     constructor() {
         this.sprite  = 'images/char-boy.png';
         this.x = 200;
-        this.y = 200;
+        this.y = 405;
     }
 
     update(dt) {
@@ -41,8 +41,21 @@ class Player {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
-    handleInput() {
-
+    handleInput(keyCode) {
+        switch (keyCode) {
+            case 'down':
+                this.y = (this.y < 405) ? this.y += 83 : this.y;
+                break;
+            case 'up':
+                this.y = (this.y > -10) ? this.y -= 83 : this.y;
+                break;
+            case 'left':
+                this.x = (this.x > -2) ? this.x -= 101: this.x;
+                break;
+            case 'right':
+                this.x = (this.x < 302) ? this.x += 101: this.x;
+                break;
+        }
     }
 }
 

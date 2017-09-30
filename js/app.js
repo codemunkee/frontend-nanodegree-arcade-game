@@ -61,7 +61,7 @@ class Player extends Entity {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-let en1 = new Enemy('images/enemy-bug.png', -10, 145, 100, 2);
+let en1 = new Enemy('images/enemy-bug.png', -10, 146, 100, 2);
 //let en2 = new Enemy('images/enemy-bug.png', -10, 230, 1.2);
 //let en3 = new Enemy('images/enemy-bug.png', -10, 180, 4);
 //let en4 = new Enemy('images/enemy-monster.png', -10, 130, 6);

@@ -89,12 +89,11 @@ var Engine = (function(global) {
         // vertical leading edge of the enemies' and the vertical trailing edge of our
         // player's sprites
 
+        console.log('Enemy: ' + allEnemies[0].y + ' to ' + (allEnemies[0].y + allEnemies[0].height));
+        console.log('Player: ' + player.y + ' to ' + (player.y + player.height));
+
         let collision = false;
-        for (let enemy of allEnemies) {
-            if ((enemy.y >= player.y) && ((enemy.y + enemy.height) <= (player.y + player.height))) {
-               collision = true;
-            }
-        }
+
         if (collision) {
             console.log(`Collision at ${player.x}, ${player.y}!`);
         }

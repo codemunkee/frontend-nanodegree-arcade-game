@@ -79,7 +79,25 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
+    }
+
+    function checkCollisions() {
+        /* We use this to check whether any enemies have collided with our player */
+
+        // enemies move from left to right, so we're primarily interested in the
+        // vertical leading edge of the enemies' and the vertical trailing edge of our
+        // player's sprites
+
+        let collision = false;
+        for (let enemy of allEnemies) {
+            if ((enemy.y >= player.y) && ((enemy.y + enemy.height) <= (player.y + player.height))) {
+               collision = true;
+            }
+        }
+        if (collision) {
+            console.log(`Collision at ${player.x}, ${player.y}!`);
+        }
     }
 
     /* This is called by the update function and loops through all of the
@@ -159,7 +177,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -171,7 +189,7 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-horn-girl.png',
+        'images/enemy-monster.png',
         'images/char-boy.png'
     ]);
     Resources.onReady(init);

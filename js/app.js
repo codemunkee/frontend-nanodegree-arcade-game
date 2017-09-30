@@ -1,8 +1,10 @@
 class Entity {
-    constructor(sprite, x, y) {
+    constructor(sprite, x, y, height) {
         this.sprite = sprite;
         this.x = x;
         this.y = y;
+        this.height = height;
+        console.log(this.sprite, this.x, this.y);
     }
 
     render() {
@@ -11,8 +13,8 @@ class Entity {
 }
 
 class Enemy extends Entity {
-    constructor(sprite, x, y, speed) {
-        super(sprite, x, y);
+    constructor(sprite, x, y, height, speed) {
+        super(sprite, x, y, height);
         this.speed = speed;
     }
 
@@ -22,29 +24,18 @@ class Enemy extends Entity {
         // which will ensure the game runs at the same speed for
         // all computers.
         if (this.x > 505) {
-            this.x = -1;
+            this.x = -1 * this.speed;
         } else {
-            this.x += 1;
+            this.x += 1 * this.speed;
         }
     }
 }
-
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-
-class Player {
-    constructor() {
-        this.sprite  = 'images/char-horn-girl.png';
-        this.x = 200;
-        this.y = 405;
+class Player extends Entity {
+    constructor(sprite, x, y, height) {
+        super(sprite, x, y, height);
     }
 
     update(dt) {
-    }
-
-    render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
     handleInput(keyCode) {
@@ -70,10 +61,13 @@ class Player {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-let en1 = new Enemy('images/enemy-bug.png', -10, 100, 1);
+let en1 = new Enemy('images/enemy-bug.png', -10, 145, 100, 2);
+//let en2 = new Enemy('images/enemy-bug.png', -10, 230, 1.2);
+//let en3 = new Enemy('images/enemy-bug.png', -10, 180, 4);
+//let en4 = new Enemy('images/enemy-monster.png', -10, 130, 6);
 let allEnemies = [en1];
 
-let player = new Player();
+let player = new Player('images/char-boy.png', 200, 405, 100);
 
 
 // This listens for key presses and sends the keys to your

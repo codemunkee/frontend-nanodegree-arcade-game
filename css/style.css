@@ -1,11 +1,15 @@
 body {
     font-family: "Raleway", sans-serif;
+    background-color: seashell;
     text-align: center;
 }
 
 .bug-title {
-    margin-bottom: 0;
+    font-size: 30px;
     font-family: "Rock Salt", cursive;
+    margin: 0 auto;
+    height: 30px;
+    overflow: visible;
 }
 
 /* Modal Content */

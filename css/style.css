@@ -32,7 +32,8 @@ body {
     width: 80%;
 }
 
-#play-again:hover {
+#play-again {
+    color: blue;
     text-decoration: underline;
     cursor: pointer;
 }

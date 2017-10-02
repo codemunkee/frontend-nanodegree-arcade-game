@@ -111,14 +111,12 @@ var Engine = (function(global) {
         }
 
         if (collision) {
-            console.log(`Collision at ${player.x}, ${player.y}!`);
             reset();
         }
     }
 
     function checkForWin() {
         if (player.y <= -5) {
-            console.log('You win!');
             gameWon = true;
         }
     }

@@ -3,12 +3,6 @@
  * draws the initial game board on the screen, and then calls the update and
  * render methods on your player and enemy objects (defined in your app.js).
  *
- * A game engine works by drawing the entire game screen over and over, kind of
- * like a flipbook you may have created as a kid. When your player moves across
- * the screen, it may look like just that image/character is moving or being
- * drawn but that is not the case. What's really happening is the entire "scene"
- * is being drawn over and over, presenting the illusion of animation.
- *
  * This engine makes the canvas' context (ctx) object globally available to make 
  * writing app.js a little simpler to work with.
  */
@@ -22,6 +16,7 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
+        gameWon = false,
         lastTime;
 
     canvas.width = 505;
@@ -52,10 +47,23 @@ var Engine = (function(global) {
          */
         lastTime = now;
 
-        /* Use the browser's requestAnimationFrame function to call this
+        /* Check if the game has been won, depending on whether or not it has
+         * use the browser's requestAnimationFrame function to call the
          * function again as soon as the browser is able to draw another frame.
          */
-        win.requestAnimationFrame(main);
+        if (gameWon) {
+            const modal = document.getElementsByClassName('modal')[0];
+            modal.style.display = 'block';
+            const playAgain = document.getElementById('play-again');
+            playAgain.addEventListener('click', () => {
+                gameWon = false;
+                modal.style.display = 'none';
+                win.requestAnimationFrame(main);
+                reset();
+            });
+        } else {
+            win.requestAnimationFrame(main);
+        }
     }
 
     /* This function does some initial setup that should only occur once,
@@ -80,22 +88,38 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
+        checkForWin();
     }
 
     function checkCollisions() {
         /* We use this to check whether any enemies have collided with our player */
 
-        // enemies move from left to right, so we're primarily interested in the
-        // vertical leading edge of the enemies' and the vertical trailing edge of our
-        // player's sprites
-
-        console.log('Enemy: ' + allEnemies[0].y + ' to ' + (allEnemies[0].y + allEnemies[0].height));
-        console.log('Player: ' + player.y + ' to ' + (player.y + player.height));
-
         let collision = false;
+
+        for (let enemy of allEnemies) {
+            let yCollision = false;
+            if ((player.y >= enemy.y) && (player.y <= (enemy.y + 80))) {
+                yCollision = true;
+            }
+            let xCollision = false;
+            if ((player.x + 80 >= enemy.x) && (player.x <= enemy.x + 80)) {
+                xCollision = true;
+            }
+            if (yCollision && xCollision) {
+                collision = true;
+            }
+        }
 
         if (collision) {
             console.log(`Collision at ${player.x}, ${player.y}!`);
+            reset();
+        }
+    }
+
+    function checkForWin() {
+        if (player.y <= -5) {
+            console.log('You win!');
+            gameWon = true;
         }
     }
 
@@ -107,7 +131,6 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        player.update(dt);
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
@@ -155,28 +178,24 @@ var Engine = (function(global) {
         renderEntities();
     }
 
-    /* This function is called by the render function and is called on each game
-     * tick. Its purpose is to then call the render functions you have defined
-     * on your enemy and player entities within app.js
-     */
     function renderEntities() {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
 
-        allEnemies.forEach(function(enemy) {
+        allEnemies.forEach(function (enemy) {
             enemy.render();
         });
 
         player.render();
     }
 
-    /* This function does nothing but it could have been a good place to
-     * handle game reset states - maybe a new game menu or a game over screen
-     * those sorts of things. It's only called once by the init() method.
-     */
+    /* Reset the location of all of our enemies */
     function reset() {
-
+        player.reset();
+        for (const enemy of allEnemies) {
+            enemy.reset();
+        }
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -187,8 +206,9 @@ var Engine = (function(global) {
         'images/stone-block.png',
         'images/water-block.png',
         'images/grass-block.png',
+        'images/grass-block.png',
+        'images/star.png',
         'images/enemy-bug.png',
-        'images/enemy-monster.png',
         'images/char-boy.png'
     ]);
     Resources.onReady(init);

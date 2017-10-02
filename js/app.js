@@ -1,41 +1,42 @@
 class Entity {
-    constructor(sprite, x, y, height) {
+    constructor(sprite, x, y) {
         this.sprite = sprite;
-        this.x = x;
-        this.y = y;
-        this.height = height;
-        console.log(this.sprite, this.x, this.y);
+        this.x = this.startX = x;
+        this.y = this.startY = y;
     }
 
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
+
+    reset() {
+        this.x = this.startX;
+        this.y = this.startY;
+    }
 }
 
 class Enemy extends Entity {
-    constructor(sprite, x, y, height, speed) {
-        super(sprite, x, y, height);
+    constructor(sprite, x, y, speed) {
+        super(sprite, x, y);
         this.speed = speed;
     }
 
     update(dt) {
-        // dt  // Parameter: dt, a time delta between ticks
-        // You should multiply any movement by the dt parameter
-        // which will ensure the game runs at the same speed for
+        // Parameter: dt, a time delta between ticks
+        // multiply any movement by the dt parameter which
+        // will ensure the game runs at the same speed for
         // all computers.
         if (this.x > 505) {
-            this.x = -1 * this.speed;
+            this.x = -1 * this.speed * dt;
         } else {
-            this.x += 1 * this.speed;
+            this.x += 1 * this.speed * dt;
         }
     }
 }
+
 class Player extends Entity {
     constructor(sprite, x, y, height) {
         super(sprite, x, y, height);
-    }
-
-    update(dt) {
     }
 
     handleInput(keyCode) {
@@ -56,22 +57,16 @@ class Player extends Entity {
     }
 }
 
+let en1 = new Enemy('images/enemy-bug.png', -10, 146, 50);
+let en2 = new Enemy('images/enemy-bug.png', -10, 230, 100);
+let en3 = new Enemy('images/enemy-bug.png', -10, 60, 150);
+let en4 = new Enemy('images/enemy-bug.png', 240, 60, 150);
+let en5 = new Enemy('images/enemy-bug.png', 390, 60, 150);
+let en6 = new Enemy('images/enemy-bug.png', 140, 230, 400);
+let allEnemies = [en1, en2, en3, en4, en5, en6];
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+let player = new Player('images/char-boy.png', 200, 405);
 
-let en1 = new Enemy('images/enemy-bug.png', -10, 146, 100, 2);
-//let en2 = new Enemy('images/enemy-bug.png', -10, 230, 1.2);
-//let en3 = new Enemy('images/enemy-bug.png', -10, 180, 4);
-//let en4 = new Enemy('images/enemy-monster.png', -10, 130, 6);
-let allEnemies = [en1];
-
-let player = new Player('images/char-boy.png', 200, 405, 100);
-
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
@@ -79,6 +74,5 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
-
     player.handleInput(allowedKeys[e.keyCode]);
 });
